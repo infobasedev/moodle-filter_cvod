@@ -26,9 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin                     = new StdClass();
 $plugin->component          = 'filter_cvod';
 $plugin->version            = 2018120300;
-$plugin->requires           = 2014051200; // Moodle 2.7.0 is required.
+$plugin->requires           = 2017051500; // Moodle 3.3 is required.
 $plugin->release            = 'v3.0-r3'; // This is our second revision for Moodle 3.0.x branch.
 $plugin->maturity           = MATURITY_STABLE;
