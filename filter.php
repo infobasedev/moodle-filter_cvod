@@ -28,13 +28,18 @@ defined('MOODLE_INTERNAL') || die();
 
 class filter_cvod extends moodle_text_filter {
   
-  private $embedmarkers;
+  //private $embedmarkers;
 
   public function filter($text, array $options = array()) {
     global $CFG, $PAGE;
 
 	if (!is_string($text) or empty($text)) {
 		// non string data can not be filtered anyway
+		return $text;
+	}
+
+	if (stripos($text, '</a>') === false) {
+		// Performance shortcut - if not </a> tag, nothing can match.
 		return $text;
 	}
 
@@ -83,19 +88,9 @@ class filter_cvod extends moodle_text_filter {
 				$a = str_replace("moodle/". $moodleText, "moodle/". urldecode($moodleText), $a);
 			}
 
-			if (!is_string($text) or empty($text)) {
-				// non string data can not be filtered anyway
-				return $text;
-			}
+			//$this->embedmarkers = 'lti\.films\.com|localhost|\.mp4';
 
-			if (stripos($text, '</a>') === false) {
-			// Performance shortcut - if not </a> tag, nothing can match.
-				return $text;
-			}
-
-			$this->embedmarkers = 'lti\.films\.com|localhost|\.mp4';
-
-			$this->trusted = !empty($options['noclean']) or !empty($CFG->allowobjectembed);
+			//$this->trusted = !empty($options['noclean']) or !empty($CFG->allowobjectembed);
 
 			$width =  435;
 			$height = 382;
@@ -108,96 +103,14 @@ class filter_cvod extends moodle_text_filter {
 				$height = substr($dims, strpos($dims, '&h=') + 3, strlen($dims) -strpos($dims, '&h=') + 3) + 50;
 			}
 
-			if(strpos($newtext['url'], '.infobase.com') !== false) {
+			$iframeText = '<iframe src="' . $newtext['url'] . '" frameborder="0" style="width: ' . $width . 'px;height:' . $height . 'px;" allowfullscreen></iframe>';
 
-				$iframeText = '<iframe src="' . $newtext['url'] . '" frameborder="0" style="width: ' . $width . 'px;height:' . $height . 'px;" allowfullscreen></iframe>';
-
-				$text = str_replace($a, $iframeText, $text);
-			}
-
-			if (empty($newtext) or $newtext === $text) {
-				// error or not filtered
-				continue;
-			}		
+			$text = str_replace($a, $iframeText, $text);	
+		}
 	}
 
     
 	return $text;	
   }
-
-  function encodeURLs($text, array $options = array())
-	{
-		if (!is_string($text) or empty($text)) {
-		// non string data can not be filtered anyway
-			return $text;
-		}
-
-		if (stripos($text, '</a>') === false) {
-		// Performance shortcut - if not </a> tag, nothing can match.
-			return $text;
-		}
-
-		$this->embedmarkers = 'lti\.films\.com|localhost|\.mp4';
-
-		$this->trusted = !empty($options['noclean']) or !empty($CFG->allowobjectembed);
-
-		preg_match("/<a\s+(?:[^>]*?\s+)?href=\"([^\"]*)\">([^\"<]*)<\/a>/", $text, $newtext);
-
-		$width =  435;
-		$height = 382;
-
-		if(strpos($newtext[1], '&w=') !== false)
-		{
-			$dims = substr($newtext[1], strpos($newtext[1], '&w='), strlen($newtext[1]) - strpos($newtext[1], '&w='));
-
-			$width = substr($dims, strpos($dims, '&w=') + 3, strpos($dims, '&h')-3) + 20;
-			$height = substr($dims, strpos($dims, '&h=') + 3, strlen($dims) -strpos($dims, '&h=') + 3) + 50;
-
-		}
-
-		if(strpos($newtext[1], '.infobase.com') !== false) {
-
-			$iframeText = '<iframe src="' . $newtext[1] . '" frameborder="0" style="width: ' . $width . 'px;height:' . $height . 'px;" allowfullscreen></iframe>';
-
-			$text = str_replace($newtext[0], $iframeText, $text);
-
-		}
-
-		if (empty($newtext) or $newtext === $text) {
-			// error or not filtered
-			return $text;
-		}
-
-		return $text;
-	}
   
-  /**
-     * Replace link with embedded content, if supported.
-     *
-     * @param array $matches
-     * @return string
-     */
-    private function callback(array $matches) {
-        global $CFG, $PAGE;
-        
-        // Get name.
-        $name = trim($matches[2]);
-        if (empty($name) or strpos($name, 'http') === 0) {
-            $name = ''; // Use default name.
-        }
-
-        $width =  364;
-        $height = 300;
-      
-		$result = $matches[1];
-		
-        // If something was embedded, return it, otherwise return original.
-        if ($result !== '') {
-            return $result;
-        } else {
-            //return $obj[0];
-            return $matches[0];
-        }
-    }
-
 }
