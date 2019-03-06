@@ -26,7 +26,9 @@ Moodle should be prompting you to install/upgrade the new plugin now. Click Upgr
 
 Click Continue on the Success page to complete the installation/upgrade.
     
-The repository and filter must be configured now.
+The filter must be configured now.
+
+Note, the plugin will be activated globally after the installation.
 
 
 Filter Configuration
@@ -45,3 +47,4 @@ Using the Filter
 Refer to this help article for instructions on how to use the filter and repository plugin.
 
 https://infobase-cvod.zendesk.com/hc/en-us/articles/360011975413-Using-the-Moodle-Repository-Plugin
+
