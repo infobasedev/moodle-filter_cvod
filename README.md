@@ -20,7 +20,7 @@ You will end up withs:
 
 Copy the filter/<product> into path/to/your/moodle/filters/
 
-Once both folders have been uploaded to their respective directories on the server, return to Site Administration and click on Notifications.
+Once the folder been uploaded to their respective directories on the server, return to Site Administration and click on Notifications.
 
 Moodle should be prompting you to install/upgrade the new plugin now. Click Upgrade Moodle database now.
 
@@ -46,5 +46,5 @@ Using the Filter
 ======================================================
 Refer to this help article for instructions on how to use the filter and repository plugin.
 
-https://infobase-cvod.zendesk.com/hc/en-us/articles/360011975413-Using-the-Moodle-Repository-Plugin
+https://infobase-cvod.zendesk.com/hc/en-us/articles/360011875894-Installing-the-Moodle-Repository-Plugin-and-Filter
 
